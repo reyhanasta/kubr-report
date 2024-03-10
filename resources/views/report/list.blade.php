@@ -850,37 +850,31 @@
                 @endauth
             </div>
         @endif
-
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
-      
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-6 lg:gap-8">
+                <div>
+                    <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">Table Register</h2>
 
-            
-                <div class="grid grid-cols-1 md:grid-cols-1 gap-6 lg:gap-8">  
-                        <div >
-                            <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">Table Register</h2>
+                    <table class="table table-bordered table-striped text-l font-semibold dark:text-white">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>No Registrasi</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
 
-                            <table class="table table-bordered table-striped text-l font-semibold dark:text-white">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>No Registrasi</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($data as $index)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $index->no_rawat }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tfoot>
-                            </table>
-                        </div>
+                        <tbody>
+                            @foreach ($data as $index)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $index->no_rawat }}</td>
+                                </tr>
+                            @endforeach
+                            </tfoot>
+                    </table>
                 </div>
-       
-
+            </div>
             <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
                 <div class="text-center text-sm sm:text-left">
                     &nbsp;
@@ -891,6 +885,8 @@
                 </div>
             </div>
         </div>
+
+        
     </div>
 </body>
 
