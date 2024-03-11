@@ -4,13 +4,16 @@ namespace App\Exports;
 
 use App\Models\Report;
 use App\Models\Register;
+use App\Models\Diagnosis;
 use Illuminate\Support\Carbon;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 
-class ReportExport implements FromCollection, WithMapping, WithHeadings
+class ReportExport implements FromView
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -20,54 +23,66 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings
         // Dapatkan tanggal awal dan akhir bulan ini
         $firstDayofMonth = Carbon::now()->startOfMonth();
         $lastDayofMonth = Carbon::now()->endOfMonth();
-        $data = Register::latest()->paginate(15);
+        $data = Register::whereBetween('tgl_registrasi', [$firstDayofMonth, $lastDayofMonth])->with(['disease'])->get();
+        // $data = Register::latest()->paginate(3);        
         return $data;
     }
 
-      
-    /**
-    * @param Register $register
-    */
-    public function map($register): array
+    public function view(): View
     {
-        return [
-            
-            "Nama Pasien",
-            $register->no_rkm_medis,
-            $register->umurdaftar." ".$register->sttsumur,
-            "-",
-            $register->tgl_registrasi,
-            "Jenis Kelamin",
-            $register->kd_pj,
-            // $register->stts_daftar,
-            $register->status_poli,
-            "asal_pasien",
-            $register->kd_poli,
-            $register->kd_dokter,
-            $register->status_lanjut,
-            "diagnosa"
-            // $register->user->name,
-            // Date::dateTimeToExcel($register->created_at),
-        ];
+         // Dapatkan tanggal awal dan akhir bulan ini
+         $firstDayofMonth = Carbon::now()->startOfMonth();
+         $lastDayofMonth = Carbon::now()->endOfMonth();
+         $data = Register::whereBetween('tgl_registrasi', [$firstDayofMonth, $lastDayofMonth])->with(['disease'])->get();
+        return view('report.list', [
+            'data' => $data
+        ]);
     }
 
-    public function headings(): array
-    {
-        return [
-            // 'No',
-            'Nama Pasien',
-            'RM',
-            'Umur',
-            'Range Umur',
-            'Tanggal',
-            'Jenis Kelamin',
-            'Bayar',
-            'Kunjungan',
-            'Asal Pasien',
-            'Poli',
-            'DPJP',
-            'Tindak Lanjut',
-            'Diagnosa',
-        ];
-    }
+
+//     public function map($data): array
+//     {
+//   dd($data->x);
+  
+//         return [
+            
+//             $data->patient->nm_pasien,
+//             $data->no_rkm_medis,
+//             $data->umurdaftar." ".$data->sttsumur,
+//             "-",
+//             $data->tgl_registrasi,
+//             $data->patient->jk,
+//             $data->caraBayar->png_jawab,
+//             // $data->stts_daftar,
+//             $data->status_poli,
+//             "asal_pasien",
+//             $data->poli->nm_poli,
+//             $data->doctor->nm_dokter,
+//             $data->status_lanjut,
+            
+//             // $diagnosa ? $diagnosa->disease->nm_penyakit : "-"
+//             // $register->user->name,
+//             // Date::dateTimeToExcel($register->created_at),
+//         ];
+//     }
+
+    // public function headings(): array
+    // {
+    //     return [
+    //         // 'No',
+    //         'Nama Pasien',
+    //         'RM',
+    //         'Umur',
+    //         'Range Umur',
+    //         'Tanggal',
+    //         'Jenis Kelamin',
+    //         'Bayar',
+    //         'Kunjungan',
+    //         'Asal Pasien',
+    //         'Poli',
+    //         'DPJP',
+    //         'Tindak Lanjut',
+    //         'Diagnosa',
+    //     ];
+    // }
 }

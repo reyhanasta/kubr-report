@@ -858,17 +858,38 @@
                     <table class="table table-bordered table-striped text-l font-semibold dark:text-white">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>No Registrasi</th>
-                                <th>Action</th>
+                                <th>Nama Pasien</th>
+                                <th>RM</th>
+                                <th>Umur</th>
+                                <th>Range Umur</th>
+                                <th>Tanggal</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Bayar</th>
+                                <th>Kunjungan</th>
+                                <th>Asal Pasien</th>
+                                <th>Poli</th>
+                                <th>DPJP</th>
+                                <th>Tindak Lanjut</th>
+                                <th>Diagnosa</th>
                             </tr>
+
                         </thead>
 
                         <tbody>
                             @foreach ($data as $index)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $index->no_rawat }}</td>
+                                    <td>{{ $index->patient->nm_pasien }}</td>
+                                    <td>{{ $index->no_rkm_medis }}</td>
+                                    <td>{{ $index->umurdaftar . ' ' . $index->sttsumur }}</td>
+                                    <td>-</td>
+                                    <td>{{ $index->tgl_registrasi }}</td>
+                                    <td>{{ $index->patient->jk }}</td>
+                                    <td>{{ $index->caraBayar->png_jawab }}</td>
+                                    <td>{{ $index->status_poli }}</td>
+                                    <td>asal_pasien</td>
+                                    <td>{{ $index->poli->nm_poli }}</td>
+                                    <td>{{ $index->doctor->nm_dokter }}</td>
+                                    <td>{{ $index->status_lanjut }}</td>
                                 </tr>
                             @endforeach
                             </tfoot>
@@ -886,7 +907,7 @@
             </div>
         </div>
 
-        
+
     </div>
 </body>
 

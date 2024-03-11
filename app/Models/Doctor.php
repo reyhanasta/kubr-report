@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Patient extends Model
+class Doctor extends Model
 {
     use HasFactory;
-    protected $table = 'pasien';
+    protected $table = 'dokter';
     public $timestamps = false;
-    protected $guard = ['no_rkm_medis'];
+    protected $guard = ['kd_dokter'];
 
     public function register(){
-        return $this->hasMany(Register::class);
+        return $this->hasMany(Doctor::class);
     }
 }

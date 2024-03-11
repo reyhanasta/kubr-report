@@ -19,6 +19,7 @@ class ReportController extends Controller
         //
    
         return Excel::download(new ReportExport, 'users.xlsx');
+        
     }
 
     /**
@@ -27,7 +28,7 @@ class ReportController extends Controller
     public function export()
     {
         
-        
+        return Excel::download(new ReportExport, 'users.xlsx');
     }
     public function create()
     {
