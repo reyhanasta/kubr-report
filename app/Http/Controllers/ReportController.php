@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReportExport;
 use App\Models\Report;
-use App\Models\Patient;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Register;
 use Illuminate\Http\Request;
 
@@ -15,13 +17,18 @@ class ReportController extends Controller
     public function index()
     {
         //
-        $data = Register::latest()->get();
-        return view('report.list', compact('data'));
+   
+        return Excel::download(new ReportExport, 'users.xlsx');
     }
 
     /**
      * Show the form for creating a new resource.
      */
+    public function export()
+    {
+        
+        
+    }
     public function create()
     {
         //
