@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ReportExport;
 use App\Models\Report;
-use App\Exports\UsersExport;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Register;
+use App\Exports\UsersExport;
 use Illuminate\Http\Request;
+use App\Exports\ReportExport;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {

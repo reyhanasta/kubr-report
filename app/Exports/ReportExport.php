@@ -13,9 +13,11 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class ReportExport implements FromCollection, WithMapping, WithHeadings
 {
+
+
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         // Dapatkan tanggal awal dan akhir bulan ini
@@ -29,29 +31,36 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings
 
     public function map($data): array
     {
-dd($data->disease->first()->nm_penyakit);
-  
-        return [
-            
+        $result = [
             $data->patient->nm_pasien,
             $data->no_rkm_medis,
-            $data->umurdaftar." ".$data->sttsumur,
+            $data->umurdaftar . " " . $data->sttsumur,
             "-",
             $data->tgl_registrasi,
             $data->patient->jk,
             $data->caraBayar->png_jawab,
-            // $data->stts_daftar,
             $data->status_poli,
             "asal_pasien",
             $data->poli->nm_poli,
             $data->doctor->nm_dokter,
             $data->status_lanjut,
-            
-            $data->disease ? $data->disease->first()->nm_penyakit : "-"
-            // $register->user->name,
-            // Date::dateTimeToExcel($register->created_at),
         ];
+
+        $diseasesByNoRawat = optional($data->disease)->groupBy('pivot.no_rawat') ?? collect();
+        foreach ($diseasesByNoRawat as $noRawat => $diseases) {
+            // Add your condition here
+           
+            if ($noRawat != $data->no_rawat) {
+                break;
+            }
+        
+            $result[] = $diseases->isEmpty() ? "-" : $diseases->pluck('nm_penyakit')->implode(', ');
+            dd($result);
+        }
+
+        return [$result]; // Wrap $result dalam array agar setiap diagnosa terpisah
     }
+
 
     public function headings(): array
     {

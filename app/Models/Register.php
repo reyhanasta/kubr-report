@@ -12,6 +12,10 @@ class Register extends Model
     protected $table = 'reg_periksa';
     protected $primaryKey = 'no_rawat';
     protected $guarded = ['no_rawat'];
+
+    protected $casts = [
+        'no_rawat' => 'string',
+    ];
     public const CREATED_AT = 'tgl_registrasi';
 
     public function patient()
