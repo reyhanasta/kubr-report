@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
-use App\Models\Register;
-use App\Exports\UsersExport;
 use Illuminate\Http\Request;
 use App\Exports\ReportExport;
 use App\Http\Controllers\Controller;
@@ -28,8 +26,7 @@ class ReportController extends Controller
      */
     public function export()
     {
-        
-        return Excel::download(new ReportExport, 'users.xlsx');
+        // Excel::download(new ReportExport, 'users.xlsx');
     }
 
     public function calculateAgeRange($umur): string
