@@ -16,7 +16,8 @@ class ReportController extends Controller
     public function index()
     {
         //
-        return Excel::download(new ReportExport, 'users.xlsx');
+        $bulan = date('M');
+        return Excel::download(new ReportExport, 'Laporan Rajal '.$bulan.'.xlsx');
         
     }
 
