@@ -49,6 +49,16 @@ class ReportController extends Controller
 
         return "-";
     }
+
+    public function jenisKelamin($jk): string
+    {
+        if ($jk='L') {
+            return "Laki-laki";
+        } elseif ($jk= 'P') {
+            return "Perempuan";
+
+    }
+}
     public function create()
     {
         //

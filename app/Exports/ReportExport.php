@@ -2,17 +2,22 @@
 
 namespace App\Exports;
 
-use App\Models\Diagnosis;
 use App\Models\Report;
 use App\Models\Register;
+use App\Models\Diagnosis;
 use Illuminate\Support\Carbon;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use App\Http\Controllers\ReportController;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ReportExport implements FromCollection, WithMapping, WithHeadings
+class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAutoSize,WithStyles
 {
   
  /**
@@ -34,17 +39,17 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings
     {
         $controllerInstance = new ReportController();
         $rentangUmur = $controllerInstance->calculateAgeRange($data->umurdaftar);
-       
+        $jenisKelamin = $controllerInstance->jenisKelamin($data->patient->jk);
         $result = [
             $data->patient->nm_pasien,
             $data->no_rkm_medis,
             $data->umurdaftar . " " . $data->sttsumur,
             $rentangUmur,
             date('d-m-Y', strtotime($data->tgl_registrasi)),
-            $data->patient->jk,
+            $jenisKelamin,
             $data->caraBayar->png_jawab,
             $data->stts_daftar,
-            $data->asal_pasien ?? 'Datang Sendiri',
+            $data->asal_pasien = '-' ? 'Datang Sendiri' : 'Rujukan',
             $data->poli->nm_poli,
             $data->doctor->nm_dokter,
             $data->status_lanjut,
@@ -81,6 +86,26 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings
             'DPJP',
             'Tindak Lanjut',
             'Diagnosa',
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+     
+    
+        // Or return the styles array
+        return [
+          // Style the first row as bold text.
+          1    => ['font' => ['bold' => true]],
+
+            // // Style the first row as bold text.
+            // 1    => ['font' => ['bold' => true]],
+
+            // // Styling a specific cell by coordinate.
+            // 'B2' => ['font' => ['italic' => true]],
+
+            // // Styling an entire column.
+            // 'C'  => ['font' => ['size' => 16]],
         ];
     }
 }

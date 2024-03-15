@@ -34,6 +34,10 @@ class Register extends Model
     {
         return $this->belongsTo(PaymentMethod::class, 'kd_pj', 'kd_pj');
     }
+    public function asalRujukan()
+    {
+        return $this->belongsTo(Rujukan::class, 'no_rawat', 'no_rawat');
+    }
 
     // public function diagnosa(){
     //     return $this->belongsToMany(Diagnosis::class,'no_rawat');
