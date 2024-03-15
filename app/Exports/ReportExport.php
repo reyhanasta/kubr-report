@@ -29,6 +29,8 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAu
         $firstDayofMonth = Carbon::now()->startOfMonth();
         $lastDayofMonth = Carbon::now()->endOfMonth();
         $data = Register::whereBetween('tgl_registrasi', [$firstDayofMonth, $lastDayofMonth])
+        ->where('kd_poli','!=','U0014' )
+        ->orderBy('tgl_registrasi', 'asc')
         ->orderBy('jam_reg', 'asc')
         ->get();
         return $data;
