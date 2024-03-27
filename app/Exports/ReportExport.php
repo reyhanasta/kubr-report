@@ -40,7 +40,7 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAu
     public function map($data): array
     {
         $controllerInstance = new ReportController();
-        $rentangUmur = $controllerInstance->calculateAgeRange($data->umurdaftar);
+        $rentangUmur = $controllerInstance->calculateAgeRange($data->umurdaftar,$data->sttsumur);
         $jenisKelamin = $controllerInstance->jenisKelamin($data->patient->jk);
         $result = [
             $data->patient->nm_pasien,
@@ -66,7 +66,6 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAu
             }
             $result[] = $diseases->isEmpty() ? "-" : $diseases->pluck('nm_penyakit')->implode(', ');
         }
-
         return [$result]; // Wrap $result dalam array agar setiap diagnosa terpisah
     }
 

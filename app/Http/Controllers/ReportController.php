@@ -29,9 +29,9 @@ class ReportController extends Controller
         // Excel::download(new ReportExport, 'users.xlsx');
     }
 
-    public function calculateAgeRange($umur): string
+    public function calculateAgeRange($umur,$statusUmur): string
     {
-        if ($umur >= 0 && $umur <= 4) {
+        if ($umur >= 0 && $umur <= 4 || $statusUmur != 'Th' ) {
             return "0-4";
         } elseif ($umur >= 5 && $umur <= 9) {
             return "5-9";
