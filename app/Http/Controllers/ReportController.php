@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use App\Exports\ReportExport;
@@ -15,9 +16,6 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
-        $bulan = date('M');
-        return Excel::download(new ReportExport, 'Laporan Rajal '.$bulan.'.xlsx');
         
     }
 
@@ -62,6 +60,7 @@ class ReportController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -70,6 +69,11 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         //
+        $awalBulan = $request->date1;
+        $akhirBulan = $request->date2;
+        // Ambil nama bulan dan tahun dari tanggal awal
+        $bulan = Carbon::parse($awalBulan)->format('F Y');
+        return Excel::download(new ReportExport($awalBulan,$akhirBulan), 'Laporan Rajal '.$bulan.'.xlsx');
     }
 
     /**

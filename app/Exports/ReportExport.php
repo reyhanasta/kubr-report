@@ -19,16 +19,21 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAutoSize,WithStyles
 {
-  
+
+    protected $awalBulan;
+    protected $akhirBulan;
+  public function __construct($awalBulan,$akhirBulan){
+    $this->awalBulan = $awalBulan;
+    $this->akhirBulan = $akhirBulan;
+  }
  /**
      * @return \Illuminate\Support\Collection
      */
     public function collection()
     {
+
         // Dapatkan tanggal awal dan akhir bulan ini
-        $firstDayofMonth = Carbon::now()->startOfMonth();
-        $lastDayofMonth = Carbon::now()->endOfMonth();
-        $data = Register::whereBetween('tgl_registrasi', [$firstDayofMonth, $lastDayofMonth])
+        $data = Register::whereBetween('tgl_registrasi', [$this->awalBulan, $this->akhirBulan])
         ->where('kd_poli','!=','U0014' )
         ->orderBy('tgl_registrasi', 'asc')
         ->orderBy('jam_reg', 'asc')
