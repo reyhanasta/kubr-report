@@ -17,16 +17,17 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAutoSize,WithStyles
+class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithStyles
 {
 
     protected $awalBulan;
     protected $akhirBulan;
-  public function __construct($awalBulan,$akhirBulan){
-    $this->awalBulan = $awalBulan;
-    $this->akhirBulan = $akhirBulan;
-  }
- /**
+    public function __construct($awalBulan, $akhirBulan)
+    {
+        $this->awalBulan = $awalBulan;
+        $this->akhirBulan = $akhirBulan;
+    }
+    /**
      * @return \Illuminate\Support\Collection
      */
     public function collection()
@@ -34,10 +35,10 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAu
 
         // Dapatkan tanggal awal dan akhir bulan ini
         $data = Register::whereBetween('tgl_registrasi', [$this->awalBulan, $this->akhirBulan])
-        ->where('kd_poli','!=','U0014' )
-        ->orderBy('tgl_registrasi', 'asc')
-        ->orderBy('jam_reg', 'asc')
-        ->get();
+            ->where('kd_poli', '!=', 'U0014')
+            ->orderBy('tgl_registrasi', 'asc')
+            ->orderBy('jam_reg', 'asc')
+            ->get();
         return $data;
     }
 
@@ -45,7 +46,7 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAu
     public function map($data): array
     {
         $controllerInstance = new ReportController();
-        $rentangUmur = $controllerInstance->calculateAgeRange($data->umurdaftar,$data->sttsumur);
+        $rentangUmur = $controllerInstance->calculateAgeRange($data->umurdaftar, $data->sttsumur);
         $jenisKelamin = $controllerInstance->jenisKelamin($data->patient->jk);
         $result = [
             $data->patient->nm_pasien,
@@ -59,7 +60,7 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAu
             $data->asal_pasien = '-' ? 'Datang Sendiri' : 'Rujukan',
             $data->poli->nm_poli,
             $data->doctor->nm_dokter,
-            $data->status_lanjut,
+            'PULANG'
         ];
         $diseasesByNoRawat = optional($data->disease)->groupBy('pivot.no_rawat') ?? collect();
         // Sort the diseases in descending order by no_rawat
@@ -97,12 +98,12 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings,ShouldAu
 
     public function styles(Worksheet $sheet)
     {
-     
-    
+
+
         // Or return the styles array
         return [
-          // Style the first row as bold text.
-          1    => ['font' => ['bold' => true]],
+            // Style the first row as bold text.
+            1    => ['font' => ['bold' => true]],
 
             // // Style the first row as bold text.
             // 1    => ['font' => ['bold' => true]],
