@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use App\Exports\ReportExport;
+use App\Exports\ReportSheetsExport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -73,7 +74,7 @@ class ReportController extends Controller
         $akhirBulan = $request->date2;
         // Ambil nama bulan dan tahun dari tanggal awal
         $bulan = Carbon::parse($awalBulan)->format('F Y');
-        return Excel::download(new ReportExport($awalBulan,$akhirBulan), 'Laporan Rajal '.$bulan.'.xlsx');
+        return Excel::download(new ReportSheetsExport($awalBulan,$akhirBulan), 'Laporan Rajal '.$bulan.'.xlsx');
     }
 
     /**

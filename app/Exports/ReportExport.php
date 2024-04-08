@@ -2,22 +2,18 @@
 
 namespace App\Exports;
 
-use App\Models\Report;
+
 use App\Models\Register;
-use App\Models\Diagnosis;
-use Illuminate\Support\Carbon;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-use PhpOffice\PhpSpreadsheet\Style\Color;
 use App\Http\Controllers\ReportController;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithStyles
+class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithStyles,WithTitle
 {
 
     protected $awalBulan;
@@ -114,5 +110,9 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
             // // Styling an entire column.
             // 'C'  => ['font' => ['size' => 16]],
         ];
+    }
+
+    public function title():string{
+        return "Rajal";
     }
 }
