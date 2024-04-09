@@ -12,12 +12,14 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithStyles,WithTitle
 {
 
     protected $awalBulan;
     protected $akhirBulan;
+    protected $index = 0;
     public function __construct($awalBulan, $akhirBulan)
     {
         $this->awalBulan = $awalBulan;
@@ -45,6 +47,7 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
         $rentangUmur = $controllerInstance->calculateAgeRange($data->umurdaftar, $data->sttsumur);
         $jenisKelamin = $controllerInstance->jenisKelamin($data->patient->jk);
         $result = [
+            ++$this->index,
             $data->patient->nm_pasien,
             $data->no_rkm_medis,
             $data->umurdaftar . " " . $data->sttsumur,
@@ -75,7 +78,7 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
     public function headings(): array
     {
         return [
-            // 'No',
+            'No',
             'Nama Pasien',
             'RM',
             'Umur',
@@ -99,17 +102,18 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
         // Or return the styles array
         return [
             // Style the first row as bold text.
-            1    => ['font' => ['bold' => true]],
-
-            // // Style the first row as bold text.
-            // 1    => ['font' => ['bold' => true]],
-
-            // // Styling a specific cell by coordinate.
-            // 'B2' => ['font' => ['italic' => true]],
-
-            // // Styling an entire column.
-            // 'C'  => ['font' => ['size' => 16]],
+            1    => [
+                    'font' => 
+                    ['bold' => true,
+                    'size' => 13,
+                    'color'=> [
+                        'argb' => 'black'
+                    ]
+                 ]
+            ],
+            
         ];
+      
     }
 
     public function title():string{
