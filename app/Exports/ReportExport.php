@@ -32,7 +32,6 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
      */
     public function collection()
     {
-
         // Dapatkan tanggal awal dan akhir bulan ini
         $data = Register::whereBetween('tgl_registrasi', [$this->awalBulan, $this->akhirBulan])
             ->where('kd_poli', '!=', 'U0014')
@@ -48,6 +47,10 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
         $controllerInstance = new ReportController();
         $rentangUmur = $controllerInstance->calculateAgeRange($data->umurdaftar, $data->sttsumur);
         $jenisKelamin = $controllerInstance->jenisKelamin($data->patient->jk);
+        
+        // Tentukan nilai untuk kolom BPJS dan UMUM berdasarkan cara bayar
+        $bpjs = $data->carabayar->png_jawab == 'BPJS' ? 1 : 0;
+        $umum = $data->carabayar->png_jawab == 'UMUM' ? 1 : 0;
         $result = [
             $data->patient->nm_pasien,
             $data->no_rkm_medis,
@@ -55,7 +58,8 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
             $rentangUmur,
             date('d-m-Y', strtotime($data->tgl_registrasi)),
             $jenisKelamin,
-            $data->caraBayar->png_jawab,
+            $bpjs,
+            $umum,
             $data->stts_daftar,
             $data->asal_pasien = '-' ? 'Datang Sendiri' : 'Rujukan',
             $data->poli->nm_poli,
@@ -86,7 +90,8 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
             'Range Umur',
             'Tanggal',
             'Jenis Kelamin',
-            'Bayar',
+            'BPJS',
+            'Umum',
             'Kunjungan',
             'Asal Pasien',
             'Poli',
@@ -99,20 +104,11 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
     public function styles(Worksheet $sheet)
     {
 
-
+      
         // Or return the styles array
         return [
             // Style the first row as bold text.
-            1    => ['font' => ['bold' => true]],
-
-            // // Style the first row as bold text.
-            // 1    => ['font' => ['bold' => true]],
-
-            // // Styling a specific cell by coordinate.
-            // 'B2' => ['font' => ['italic' => true]],
-
-            // // Styling an entire column.
-            // 'C'  => ['font' => ['size' => 16]],
+            1    => ['font' => ['bold' => true]]
         ];
     }
 }
