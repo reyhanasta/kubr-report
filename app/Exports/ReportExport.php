@@ -2,26 +2,24 @@
 
 namespace App\Exports;
 
-use App\Models\Report;
+
 use App\Models\Register;
-use App\Models\Diagnosis;
-use Illuminate\Support\Carbon;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-use PhpOffice\PhpSpreadsheet\Style\Color;
 use App\Http\Controllers\ReportController;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithStyles
+class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithStyles,WithTitle
 {
 
     protected $awalBulan;
     protected $akhirBulan;
+    protected $index = 0;
     public function __construct($awalBulan, $akhirBulan)
     {
         $this->awalBulan = $awalBulan;
@@ -52,6 +50,7 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
         $bpjs = $data->carabayar->png_jawab == 'BPJS' ? 1 : 0;
         $umum = $data->carabayar->png_jawab == 'UMUM' ? 1 : 0;
         $result = [
+            ++$this->index,
             $data->patient->nm_pasien,
             $data->no_rkm_medis,
             $data->umurdaftar . " " . $data->sttsumur,
@@ -83,7 +82,7 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
     public function headings(): array
     {
         return [
-            // 'No',
+            'No',
             'Nama Pasien',
             'RM',
             'Umur',
@@ -108,7 +107,21 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
         // Or return the styles array
         return [
             // Style the first row as bold text.
-            1    => ['font' => ['bold' => true]]
+            1    => [
+                    'font' => 
+                    ['bold' => true,
+                    'size' => 13,
+                    'color'=> [
+                        'argb' => 'black'
+                    ]
+                 ]
+            ],
+            
         ];
+      
+    }
+
+    public function title():string{
+        return "Rajal";
     }
 }
