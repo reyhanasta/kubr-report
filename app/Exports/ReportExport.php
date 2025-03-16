@@ -42,29 +42,38 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
 
     public function map($data): array
     {
-        $controllerInstance = new ReportController();
-        $rentangUmur = $controllerInstance->calculateAgeRange($data->umurdaftar, $data->sttsumur);
-        $jenisKelamin = $controllerInstance->jenisKelamin($data->patient->jk);
-        
+     
         // Tentukan nilai untuk kolom BPJS dan UMUM berdasarkan cara bayar
-        $bpjs = $data->carabayar->png_jawab == 'BPJS' ? 1 : 0;
-        $umum = $data->carabayar->png_jawab == 'UMUM' ? 1 : 0;
+        $bpjs = $data->carabayar->png_jawab == 'BPJS' ? 'BPJS' : 0;
+        $umum = $data->carabayar->png_jawab == 'UMUM' ? 'UMUM' : 0;
+        // Tentukan nilai untuk kolom L dan P berdasarkan Jenis Kelamin
+        $lk = $data->patient->jk == 'L' ? 1 : 0;
+        $pr = $data->patient->jk == 'P' ? 1 : 0;
+        // Tentukan nilai untuk kolom L dan P berdasarkan Jenis Kelamin
+        $pasienLama = $data->stts_daftar == 'Lama' ? 1 : 0;
+        $pasienBaru = $data->stts_daftar == 'Baru' ? 1 : 0;
+        // Tentukan nilai asal rujukan berdasarkan Jenis Kelamin
+        $asal_pasien ='V';
+
         $result = [
             ++$this->index,
             $data->patient->nm_pasien,
             $data->no_rkm_medis,
             $data->umurdaftar . " " . $data->sttsumur,
-            $rentangUmur,
             date('d-m-Y', strtotime($data->tgl_registrasi)),
-            $jenisKelamin,
+            $lk,
+            $pr,
             $bpjs,
             $umum,
-            $data->stts_daftar,
-            $data->asal_pasien = '-' ? 'Datang Sendiri' : 'Rujukan',
+            $pasienLama,
+            $pasienBaru,
+            // $data->stts_daftar,
+            $asal_pasien,
             $data->poli->nm_poli,
             $data->doctor->nm_dokter,
             'PULANG'
         ];
+      
         $diseasesByNoRawat = optional($data->disease)->groupBy('pivot.no_rawat') ?? collect();
         // Sort the diseases in descending order by no_rawat
         // $diseasesByNoRawat = $diseasesByNoRawat->sortByDesc->first()->first();
@@ -86,12 +95,13 @@ class ReportExport implements FromCollection, WithMapping, WithHeadings, ShouldA
             'Nama Pasien',
             'RM',
             'Umur',
-            'Range Umur',
             'Tanggal',
-            'Jenis Kelamin',
+            'Laki-laki',
+            'Perempuan',
             'BPJS',
             'Umum',
-            'Kunjungan',
+            'Lama',
+            'Baru',
             'Asal Pasien',
             'Poli',
             'DPJP',
