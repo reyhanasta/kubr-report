@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReportGeneratorController;
+use App\Http\Controllers\ReportTemplateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +21,8 @@ Route::get('/', function () {
 });
 
  // Resource routes
- Route::resource('laporan', ReportController::class);
+Route::resource('laporan', ReportController::class);
+Route::resource('template', ReportTemplateController::class);
+// Route for the Generator Page
+Route::get('/generator', [ReportGeneratorController::class, 'index'])->name('generator.index');
+Route::post('/generator/generate', [ReportGeneratorController::class, 'generate'])->name('generator.generate'); // <-- Add this POST route
