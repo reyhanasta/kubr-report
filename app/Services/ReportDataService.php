@@ -21,9 +21,6 @@ class ReportDataService
     }
 
     // --- Methods to fetch data ---
-
-   
-
     public function getTotalPasienHariIni(): int
     {
         // Adjust 'visit_date' and model name as per your database schema

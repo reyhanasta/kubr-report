@@ -189,21 +189,21 @@
                     this.inputs = newInputs;
                 },
 
-                formatLabel(placeholder) {
-                    // Simple formatter: replace underscores with spaces and capitalize words
-                    return placeholder.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                },
+                // formatLabel(placeholder) {
+                //     // Simple formatter: replace underscores with spaces and capitalize words
+                //     return placeholder.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                // },
 
-                getInputType(placeholder) {
-                    // Basic heuristic for input types (can be expanded)
-                    if (placeholder.includes('jumlah') || placeholder.includes('total') || placeholder.includes('pasien') || placeholder.includes('kamar')) {
-                        return 'number';
-                    }
-                    if (placeholder.includes('tanggal') || placeholder.includes('date')) {
-                        return 'date';
-                    }
-                    return 'text'; // Default to text
-                },
+                // getInputType(placeholder) {
+                //     // Basic heuristic for input types (can be expanded)
+                //     if (placeholder.includes('jumlah') || placeholder.includes('total') || placeholder.includes('pasien') || placeholder.includes('kamar')) {
+                //         return 'number';
+                //     }
+                //     if (placeholder.includes('tanggal') || placeholder.includes('date')) {
+                //         return 'date';
+                //     }
+                //     return 'text'; // Default to text
+                // },
 
                 copyToClipboard() {
                     if (!this.generatedReportText.trim()) return;
